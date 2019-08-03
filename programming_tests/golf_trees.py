@@ -56,42 +56,45 @@ class Solution:
                 overall_steps += minimum_steps
         return overall_steps
             
+import unittest
+from utils import compare
 
+class TestGolf(unittest.TestCase):
 
-def a(inp, answer_func, sol):
-    print('-------------')
-    result = answer_func(inp)
-    if result != sol:
-        print('Input: ', inp)
-        print('Real answer: ', sol)
-        print('Answer: ', result)
-    else:
-        print('Correct ', result)
+    def setUp(self):
+        self.s = Solution()
 
-s = Solution()
+    @unittest.skip
+    def test_basic(self):
+        compare(self, [[
+            [1,2,3],
+            [0,0,4],
+            [7,6,5]
+            ]], self.s.cutOffTree, 6
+        )
 
-'''
-a([
- [1,2,3],
- [0,0,4],
- [7,6,5]
-],s.cutOffTree, 6)
+    def test_2(self):
+        compare(self, [[
+            [1,2,3],
+            [0,0,0],
+            [7,6,5]
+            ]], self.s.cutOffTree, -1
+        )
 
-a([
- [1,2,3],
- [0,0,0],
- [7,6,5]
-],s.cutOffTree,-1)
+    def test_3(self):
+        compare(self, [[
+            [2,3,4],
+            [0,0,5],
+            [8,7,6]
+            ]], self.s.cutOffTree, 6
+        )
  
-a([
- [2,3,4],
- [0,0,5],
- [8,7,6]
-],s.cutOffTree,6)
-'''
-a([
-    [9, 12,5, 14],
-    [17,11,13,15],
-    [2, 20,19,21],
-    [16,4, 7, 8],
-    [18,3, 6, 10]], s.cutOffTree, 57)
+    @unittest.skip
+    def test_larger(self):
+        compare(self, [[
+            [9, 12,5, 14],
+            [17,11,13,15],
+            [2, 20,19,21],
+            [16,4, 7, 8],
+            [18,3, 6, 10]]], self.s.cutOffTree, 57
+        )
