@@ -1,4 +1,4 @@
-from types import List
+from typing import List
 
 # paste solution method definition here
 
