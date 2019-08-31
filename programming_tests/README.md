@@ -8,7 +8,55 @@ I attempt problems, usually with a time limit. 90% of the problems I attempt are
 
 # Base problems/solutions
 
-Many other problems roughly reduce to these problems, so their solutions are useful inspiration.
+Many other problems roughly reduce to these problems, so their solutions are useful inspiration. Edge cases to these problems aren't described here.
+
+## Memoization (top-down recursion)
+
+### Problem
+
+The problem can be solved by recursively solving smaller sub-problem(s) of the same type. The output of a problem is always the same for a given set of inputs. The sub-problems must be solved multiple times in the tree of recursive calls.
+
+### Solution
+
+Memoize the recursive call to solving subproblems.
+
+```python3
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def recursive_problem(*args):
+    subproblems = get_subproblems(args)
+    results = [recursive_problem(*params) for params in subproblems]
+    return combine_results(results)
+```
+
+## Backtracking (bottom-up tabulation)
+
+### Problem
+
+The problem can be solved by building a tree of alternative possibilities. All descendents of a node of the tree can be pruned by evaluating that node alone.
+
+### Solution
+
+Store a priority queue of nodes to explore. Continually dequeue from the priority queue, evaluate:
+
+1. Whether a solution has been reached.
+2. Whether the node is part of a possible solution (whether the node can be pruned). If it is part of a possible solution, add all of its children to the priority queue.
+
+```python3
+q = empty_priority_queue()
+q.enqeue(base_case)
+
+while q is not empty:
+    node = q.dequeue()
+    if solution_reached(node):
+        return solution(node)
+    if part_of_possible_solution(node):
+        for child in children(node):
+            q.enqueue(child)
+return solution_not_reached()
+
+```
 
 ## Shortest path (Bellman-Ford)
 
@@ -16,7 +64,25 @@ Many other problems roughly reduce to these problems, so their solutions are use
 
 Edges in a graph have a cost to traverse. What is the smallest cost to traverse from vertex A to vertex B?
 
-### Sub-problems & optimal substructure
+### Solution
+
+Start with the distance of each vertex except the source equal to infinity. For each edge in the graph check if it reduces the distance to the destination vertex and update. Do this `len(vertices) - 1` times.
+
+```python3
+for v in vertices:
+    distance[v] = infinity
+
+distance[source] = 0
+
+for _ in range(vertices-1):
+    for source, destination, weight in edges:
+        distance[destination] = min(distance[destination], distance[source] + weight)
+result = distance[final_destination]
+```
+
+Time: O(VE)
+
+Space: O(V+E)
 
 ### Code
 
@@ -26,11 +92,12 @@ Edges in a graph have a cost to traverse. What is the smallest cost to traverse 
 
 Given a set of items, each with a weight and a value how many of each item should be included in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.
 
-### Sub-problems & optimal substructure
+### Solution
 
 For each item i with weight t and value v, for each weight leading up to the actual knapsack weight (w in 0..W): either include the item or exclude it starting from i=0, w=0. To decide whether to include at each (i, w), compare value(i-1, w) to value(i, w-t) + v. Either exclude the item and consider what happened with previous items or combine the item with the maximum value achieved with the rest of the available space.
 
 Time: O(nW)
+
 Space: O(nW)
 
 ### Code
@@ -56,7 +123,7 @@ Edit distance is a way of quantifying how dissimilar two lists of symbols are to
 
 Convert list X[1..m] to list Y[1..n] by performing edit operations on X.
 
-### Sub-problems & optimal substructure
+### Solution
 
 Convert X[1..i] to Y[1..j] by performing edit operations on X, for every combination of i in 0..m, j in 0..n starting from i=0, j=0.
 
@@ -65,6 +132,7 @@ Case 1: i=0 or j=0. Distance is `max(i, j)`.
 Case 2: i>0 and j>0. The distance from X[1..i-1] to Y[1..j] has been computed already. The distance from X[1..i] to Y[1..j-1] has been computed already. The difference between those two subproblems and X[1..i] to Y[1..j] is one additional character. Figure out what operation must happen to get from those subproblems to the current problem, and pick the smallest resulting distance: `min(distance(i-1, j) + O1, distance(i, j-1) + O2)`
 
 Time: O(mn)
+
 Space: O(mn)
 
 ### Code
