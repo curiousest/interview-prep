@@ -4,11 +4,24 @@ To prepare for programming problems.
 
 # Practice Problems
 
-I attempt problems, usually with a time limit. 90% of the problems I attempt aren't "finished to perfection" within the time limit. I review "correct" solutions afterwards.
+I attempt problems, usually with a time limit. 90% of the problems I attempt aren't "finished" within the time limit. I review "the correct solution" afterwards.
 
-# Base problems/solutions
+I've found that programming tests fall into one of the following categories:
 
-Many other problems roughly reduce to these problems, so their solutions are useful inspiration. Edge cases to these problems aren't described here.
+* "Use the applicable data structure" problems
+    * Trees & Graphs (binary trees, tries, b-trees, graphs)
+        * Search (breadth-first, depth-first)
+    * Hashmaps
+    * Arrays (arrays, sets, queues/stacks, heaps)
+        * Search (binary)
+        * Sort (merge, quick, radix)
+    * Linked lists
+* Dynamic programming problems
+* Math problems
+
+# Dynamic programming base problems/solutions
+
+Many dynamic programming problems roughly reduce to these problems, so their solutions are useful inspiration. Edge cases to these problems aren't described here.
 
 ## Memoization (top-down recursion)
 
@@ -38,7 +51,7 @@ The problem can be solved by building a tree of alternative possibilities. All d
 
 ### Solution
 
-Store a priority queue of nodes to explore. Continually dequeue from the priority queue, evaluate:
+Store a priority queue of nodes (possible solutions) to explore. Continually dequeue from the priority queue, evaluate:
 
 1. Whether a solution has been reached.
 2. Whether the node is part of a possible solution (whether the node can be pruned). If it is part of a possible solution, add all of its children to the priority queue.
@@ -68,6 +81,10 @@ Edges in a graph have a cost to traverse. What is the smallest cost to traverse 
 
 Start with the distance of each vertex except the source equal to infinity. For each edge in the graph check if it reduces the distance to the destination vertex and update. Do this `len(vertices) - 1` times.
 
+Time: O(VE)
+
+Space: O(V+E)
+
 ```python3
 for v in vertices:
     distance[v] = infinity
@@ -79,12 +96,6 @@ for _ in range(vertices-1):
         distance[destination] = min(distance[destination], distance[source] + weight)
 result = distance[final_destination]
 ```
-
-Time: O(VE)
-
-Space: O(V+E)
-
-### Code
 
 ## 0-1 Knapsack
 
@@ -99,8 +110,6 @@ For each item i with weight t and value v, for each weight leading up to the act
 Time: O(nW)
 
 Space: O(nW)
-
-### Code
 
 ```python3
 value = [[0 for w in range(W + 1)] for i in range(items)]
@@ -134,8 +143,6 @@ Case 2: i>0 and j>0. The distance from X[1..i-1] to Y[1..j] has been computed al
 Time: O(mn)
 
 Space: O(mn)
-
-### Code
 
 ```python3
 
